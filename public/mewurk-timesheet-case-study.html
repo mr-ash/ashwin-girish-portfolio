@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mewurk Timesheet — UX Case Study · Ashwin Girish</title>
+<meta name="description" content="UI/UX case study: redesigning time tracking for Mewurk's HRMS — effortless logging for employees, real-time visibility for managers, accuracy for HR.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --royal:#2E5BFF;
+  --royal-deep:#1E44D8;
+  --ink:#1E1E1E;
+  --muted:#6F6F6F;
+  --line:#E9E8E4;
+  --bgsoft:#F7F7F5;
+  --card:#FFFFFF;
+
+  --blue:#0D99FF;
+  --purple:#A259FF;
+  --green:#0ACF83;
+  --orange:#FF7262;
+  --red:#F24E1E;
+  --yellow:#FFC700;
+
+  --sans:'Inter',sans-serif;
+  --s0:12px; --s1:16px; --s2:24px; --s3:32px; --s4:48px; --s5:64px;
+  --section:clamp(72px,8vw,112px);
+  --gutter:clamp(20px,5vw,56px);
+  --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:#fff;color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+::selection{background:rgba(46,91,255,.22)}
+
+.wrap{max-width:1000px;margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter)}
+section{padding-top:var(--section)}
+
+/* section titles like the case study doc */
+.h2{
+  font-size:clamp(24px,3vw,34px);font-weight:750;letter-spacing:-.03em;line-height:1.15;
+}
+.h2 + .lead{margin-top:var(--s1)}
+.lead{color:var(--muted);font-size:15.5px;max-width:720px}
+.kicker{
+  display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--royal);background:rgba(46,91,255,.08);border:1px solid rgba(46,91,255,.2);
+  padding:6px 12px;border-radius:999px;margin-bottom:var(--s1);
+}
+
+/* ---------- top bar (same pattern as Spot-to-Plot case study) ---------- */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+nav .wrap{
+  display:flex;align-items:center;justify-content:space-between;height:58px;
+  max-width:1000px;margin:0 auto;padding:0 var(--gutter);
+}
+nav a{color:var(--ink);text-decoration:none;font-weight:600;font-size:.9rem}
+nav .links{display:flex;gap:20px;flex-wrap:wrap;justify-content:flex-end}
+nav .links a{color:var(--muted);font-weight:500}
+nav .links a:hover{color:var(--royal)}
+@media(max-width:720px){nav .links{display:none}}
+
+/* ---------- hero banner ---------- */
+.hero{
+  background:linear-gradient(180deg,var(--royal) 0%,var(--royal) 42%,#0a0a0a 72%,#000 100%);
+  position:relative;overflow:hidden;
+  padding:72px 0 0;border-radius:0 0 28px 28px;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;bottom:45%;
+  background-image:radial-gradient(rgba(255,255,255,.13) 1px,transparent 1px);
+  background-size:20px 20px;pointer-events:none;
+}
+.hero-chips{
+  position:relative;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:var(--s2);
+}
+.hero-chip{
+  font-size:11px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;
+  background:#fff;color:var(--royal);border-radius:999px;padding:8px 18px;
+}
+.hero-title{
+  position:relative;text-align:center;color:#fff;
+  font-size:clamp(64px,13vw,168px);font-weight:800;letter-spacing:.01em;line-height:.95;
+}
+.hero-sub{
+  position:relative;text-align:center;color:rgba(255,255,255,.85);
+  font-size:14px;font-weight:500;margin-top:10px;
+}
+/* Hero product shot — laptop + phone */
+.devices{
+  position:relative;z-index:1;
+  max-width:min(960px,100%);
+  margin:clamp(28px,5vw,48px) auto 0;
+  padding:0;
+}
+.devices img{
+  display:block;width:100%;height:auto;
+  vertical-align:bottom;
+}
+
+/* ---------- about project ---------- */
+.about-grid{
+  display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,4vw,56px);align-items:center;
+}
+.brand-mark{
+  width:120px;height:120px;border-radius:24px;background:var(--bgsoft);border:1px solid var(--line);
+  display:grid;place-items:center;font-size:44px;font-weight:800;color:var(--royal);
+}
+.meta-rows{display:flex;flex-direction:column;gap:var(--s2)}
+.meta-row b{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tag{
+  display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;
+  border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 16px;
+}
+.tag i{width:8px;height:8px;border-radius:50%;font-style:normal}
+@media(max-width:640px){.about-grid{grid-template-columns:1fr}}
+
+/* ---------- project goal ---------- */
+.goal{
+  background:var(--bgsoft);border:1px solid var(--line);border-radius:var(--r);
+  padding:clamp(24px,4vw,44px);position:relative;
+}
+.goal::before{
+  content:'“';position:absolute;top:2px;left:22px;font-size:90px;font-weight:800;color:rgba(46,91,255,.16);line-height:1;
+}
+.goal p{
+  font-size:clamp(17px,2vw,21px);font-weight:550;line-height:1.6;max-width:820px;
+  padding-left:clamp(28px,4vw,48px);
+}
+.goal p strong{color:var(--royal);font-weight:700}
+
+/* ---------- problem statements ---------- */
+.problems{display:grid;grid-template-columns:1fr 1fr;gap:var(--s1);margin-top:var(--s3)}
+.problem{
+  border:1px solid var(--line);border-radius:var(--r);padding:var(--s2);
+  background:var(--card);transition:border-color .2s,box-shadow .2s;position:relative;
+}
+.problem:hover{border-color:var(--royal);box-shadow:0 14px 34px -22px rgba(46,91,255,.4)}
+.problem .num{
+  width:34px;height:34px;border-radius:50%;border:1.5px dashed var(--red);color:var(--red);
+  display:grid;place-items:center;font-size:13px;font-weight:750;margin-bottom:var(--s1);
+}
+.problem h3{font-size:16.5px;font-weight:700;letter-spacing:-.01em}
+.problem p{margin-top:8px;color:var(--muted);font-size:14px}
+.problem p b{color:var(--ink);font-weight:650}
+@media(max-width:700px){.problems{grid-template-columns:1fr}}
+
+/* ---------- research stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s1);margin-top:var(--s3)}
+.stat{
+  border-radius:var(--r);padding:var(--s2);color:#fff;min-height:170px;
+  display:flex;flex-direction:column;justify-content:space-between;gap:var(--s1);
+  transition:transform .25s;
+}
+.stat:hover{transform:translateY(-5px)}
+.stat b{font-size:clamp(34px,4vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1}
+.stat p{font-size:12.5px;line-height:1.5;opacity:.94}
+.stat.g1{background:linear-gradient(135deg,#0E7A5F,#0ACF83)}
+.stat.g2{background:linear-gradient(135deg,#FF7262,#FFB199)}
+.stat.g3{background:linear-gradient(135deg,#5B34C9,#A259FF)}
+.stat.g4{background:linear-gradient(135deg,#1E44D8,#0D99FF)}
+@media(max-width:820px){.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.stats{grid-template-columns:1fr}}
+
+/* ---------- interviews ---------- */
+.interview-band{
+  margin-top:var(--s3);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+}
+.iv-top{padding:var(--s2);background:var(--bgsoft);border-bottom:1px solid var(--line)}
+.iv-top p{color:var(--muted);font-size:14.5px;max-width:760px}
+.iv-top p b{color:var(--ink)}
+.takeaways{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s1);padding:var(--s2)}
+.tk{
+  border-radius:12px;padding:var(--s1);font-size:13.5px;line-height:1.55;font-weight:500;
+}
+.tk b{display:block;font-size:11px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.tk.t1{background:rgba(255,199,0,.14)}.tk.t1 b{color:#9A7B00}
+.tk.t2{background:rgba(10,207,131,.12)}.tk.t2 b{color:#0A9A62}
+.tk.t3{background:rgba(162,89,255,.12)}.tk.t3 b{color:#7A3FD1}
+@media(max-width:760px){.takeaways{grid-template-columns:1fr}}
+
+/* ---------- personas ---------- */
+.persona{
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:var(--s2);
+  background:var(--card);
+}
+.p-head{
+  display:flex;align-items:center;gap:var(--s1);padding:var(--s2);flex-wrap:wrap;
+}
+.persona.p1 .p-head{background:#EFE9FF}
+.persona.p2 .p-head{background:#E1F6EC}
+.persona.p3 .p-head{background:#FFECE4}
+.p-avatar{
+  width:56px;height:56px;border-radius:50%;display:grid;place-items:center;
+  font-size:20px;font-weight:800;color:#fff;flex:0 0 auto;
+}
+.persona.p1 .p-avatar{background:var(--purple)}
+.persona.p2 .p-avatar{background:#0A9A62}
+.persona.p3 .p-avatar{background:var(--orange)}
+.p-id b{display:block;font-size:17px;font-weight:750}
+.p-id span{font-size:12.5px;color:var(--muted);font-weight:550}
+.p-facts{margin-left:auto;display:flex;gap:var(--s2);text-align:right}
+.p-facts div b{display:block;font-size:13px;font-weight:750}
+.p-facts div span{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.p-quote{
+  margin:var(--s2) var(--s2) 0;padding:var(--s1) var(--s2);
+  border-left:3px solid var(--royal);background:var(--bgsoft);border-radius:0 10px 10px 0;
+  font-size:14.5px;font-style:italic;color:#3A3A3A;
+}
+.p-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--s2);padding:var(--s2)}
+.p-col h4{
+  font-size:11px;font-weight:750;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;
+  display:flex;align-items:center;gap:7px;
+}
+.p-col.goals h4{color:#0A9A62}
+.p-col.frus h4{color:#C43B14}
+.p-col.needs h4{color:var(--royal)}
+.p-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.p-col li{font-size:13px;color:var(--muted);line-height:1.5;padding-left:16px;position:relative}
+.p-col.goals li::before{content:'✓';position:absolute;left:0;color:#0A9A62;font-weight:700}
+.p-col.frus li::before{content:'✕';position:absolute;left:0;color:#C43B14;font-weight:700;font-size:11px;top:2px}
+.p-col.needs li::before{content:'→';position:absolute;left:0;color:var(--royal);font-weight:700}
+@media(max-width:820px){.p-cols{grid-template-columns:1fr}.p-facts{margin-left:0;text-align:left}}
+
+/* ---------- user flow ---------- */
+.flow{
+  margin-top:var(--s3);border:1px solid var(--line);border-radius:var(--r);
+  padding:var(--s3) var(--s2);background:var(--bgsoft);overflow-x:auto;
+}
+.flow-track{display:flex;align-items:center;gap:10px;min-width:760px}
+.fnode{
+  background:#FFE58A;border:1px solid #E8C94F;border-radius:10px;
+  font-size:12px;font-weight:650;text-align:center;padding:14px 12px;flex:1;line-height:1.4;
+  box-shadow:0 6px 14px -8px rgba(30,30,30,.25);
+}
+.fnode.start{background:#D9F7E8;border-color:#8FD9B6}
+.fnode.dec{
+  background:#1E1E1E;color:#fff;border-color:#1E1E1E;border-radius:12px;
+  clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);padding:22px 18px;font-size:10.5px;flex:1.1;
+}
+.fnode.end{background:#E4ECFF;border-color:#9BB4F5}
+.farrow{color:var(--muted);font-size:16px;font-weight:700;flex:0 0 auto}
+.flow-note{margin-top:var(--s1);font-size:12.5px;color:var(--muted);text-align:center}
+
+/* ---------- solutions ---------- */
+.solutions{display:grid;grid-template-columns:1fr 1fr;gap:var(--s1);margin-top:var(--s3)}
+.sol{
+  border:1px solid var(--line);border-radius:var(--r);padding:var(--s2);background:var(--card);
+  transition:border-color .2s,box-shadow .2s;
+}
+.sol:hover{border-color:var(--royal);box-shadow:0 14px 34px -22px rgba(46,91,255,.4)}
+.sol-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sol-ico{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:16px;flex:0 0 auto}
+.sol h3{font-size:15.5px;font-weight:700;letter-spacing:-.01em}
+.sol p{color:var(--muted);font-size:13.5px}
+.sol-meta{display:flex;gap:8px;margin-top:var(--s1);flex-wrap:wrap}
+.pill{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 10px}
+.pill.p0{background:rgba(242,78,30,.12);color:#C43B14}
+.pill.p1{background:rgba(255,199,0,.18);color:#9A7B00}
+.pill.who{background:var(--bgsoft);color:var(--muted);border:1px solid var(--line)}
+@media(max-width:700px){.solutions{grid-template-columns:1fr}}
+
+/* ---------- usability testing ---------- */
+.ut-band{
+  margin-top:var(--s3);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+}
+.ut-bar{background:var(--ink);color:#fff;padding:12px var(--s2);font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.ut-list{list-style:none;padding:var(--s1) var(--s2) var(--s2)}
+.ut-list li{
+  display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px;color:#3A3A3A;
+}
+.ut-list li:last-child{border-bottom:none}
+.ut-list li::before{
+  content:counter(task);counter-increment:task;
+  width:24px;height:24px;border-radius:7px;background:rgba(46,91,255,.1);color:var(--royal);
+  font-size:11.5px;font-weight:750;display:grid;place-items:center;flex:0 0 auto;margin-top:2px;
+}
+.ut-list{counter-reset:task}
+
+/* findings */
+.findings{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s1);margin-top:var(--s3)}
+.finding{border-radius:var(--r);padding:var(--s2);border:1px solid var(--line)}
+.finding b{display:block;font-size:11px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.finding h3{font-size:15px;font-weight:700;margin-bottom:6px;letter-spacing:-.01em}
+.finding p{font-size:13px;color:var(--muted)}
+.finding.f1{background:rgba(242,78,30,.06)}.finding.f1 b{color:#C43B14}
+.finding.f2{background:rgba(255,199,0,.1)}.finding.f2 b{color:#9A7B00}
+.finding.f3{background:rgba(10,207,131,.07)}.finding.f3 b{color:#0A9A62}
+@media(max-width:760px){.findings{grid-template-columns:1fr}}
+
+/* ---------- iterations ---------- */
+.iters{margin-top:var(--s3);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.it-head,.it-row{display:grid;grid-template-columns:1fr 1fr}
+.it-head div{
+  padding:14px var(--s2);font-size:12px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;color:#fff;
+}
+.it-head div:first-child{background:#B9B7B0}
+.it-head div:last-child{background:var(--green)}
+.it-row div{padding:var(--s1) var(--s2);font-size:14px;border-top:1px solid var(--line);color:#3A3A3A}
+.it-row div:first-child{background:var(--bgsoft);color:var(--muted)}
+.it-row div:last-child{border-left:1px solid var(--line)}
+.it-row div:last-child::before{content:'→ ';color:var(--green);font-weight:700}
+@media(max-width:640px){
+  .it-head{display:none}
+  .it-row{grid-template-columns:1fr}
+  .it-row div:last-child{border-left:none}
+}
+
+/* ---------- next / footer ---------- */
+.next{
+  margin-top:var(--section);background:var(--royal);border-radius:20px;
+  padding:clamp(36px,6vw,64px) var(--s3);text-align:center;color:#fff;position:relative;overflow:hidden;
+}
+.next::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.12) 1px,transparent 1px);
+  background-size:18px 18px;
+}
+.next h2{position:relative;font-size:clamp(26px,4vw,44px);font-weight:800;letter-spacing:-.03em}
+.next p{position:relative;margin-top:8px;font-size:14.5px;opacity:.9}
+.next-cta{position:relative;margin-top:var(--s3);display:flex;justify-content:center;gap:var(--s1);flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;text-decoration:none;
+  font-size:14px;font-weight:650;padding:13px 26px;border-radius:10px;font-family:var(--sans);
+  transition:background .2s,color .2s,transform .1s;border:1px solid transparent;
+}
+.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn-white{background:#fff;color:var(--royal)}
+.btn-white:hover{background:#EAF0FF}
+.btn-ghost{border-color:rgba(255,255,255,.5);color:#fff}
+.btn-ghost:hover{background:rgba(255,255,255,.12)}
+.btn:active{transform:scale(.97)}
+
+footer{padding:var(--s3) 0 var(--s2)}
+.foot-inner{
+  max-width:1000px;margin:0 auto;padding:0 var(--gutter);
+  display:flex;justify-content:space-between;gap:var(--s1);flex-wrap:wrap;
+  font-size:12px;color:var(--muted);
+}
+.foot-inner a{color:var(--royal);text-decoration:none;font-weight:600}
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="/">← Ashwin Girish</a>
+    <div class="links">
+      <a href="#about">About</a>
+      <a href="#goal">Goal</a>
+      <a href="#problems">Problems</a>
+      <a href="#research">Research</a>
+      <a href="#personas">Personas</a>
+      <a href="#flow">Flow</a>
+      <a href="#solutions">Solutions</a>
+      <a href="#testing">Testing</a>
+      <a href="#iterations">Iterations</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-chips">
+    <span class="hero-chip">Mewurk Technologies</span>
+    <span class="hero-chip">HRMS Application</span>
+    <span class="hero-chip">UI/UX Case Study</span>
+  </div>
+  <h1 class="hero-title">TIMESHEET</h1>
+  <p class="hero-sub">Making time tracking effortless — for employees, managers &amp; HR</p>
+  <div class="devices">
+    <img
+      src="/mewurk/timesheet-hero.png"
+      alt="Mewurk Timesheet on desktop and mobile — time logs, weekly grid, and submit flow"
+      width="1024"
+      height="687"
+      fetchpriority="high"
+    >
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ABOUT -->
+<section id="about">
+  <span class="kicker reveal">About project</span>
+  <div class="about-grid reveal">
+    <div class="brand-mark">M</div>
+    <div class="meta-rows">
+      <div class="meta-row">
+        <b>My role</b>
+        <div class="tags">
+          <span class="tag"><i style="background:var(--purple)"></i>User Research</span>
+          <span class="tag"><i style="background:var(--blue)"></i>UX Design</span>
+          <span class="tag"><i style="background:var(--green)"></i>Prototyping</span>
+          <span class="tag"><i style="background:var(--orange)"></i>Usability Testing</span>
+        </div>
+      </div>
+      <div class="meta-row">
+        <b>Tools used</b>
+        <div class="tags">
+          <span class="tag"><i style="background:var(--red)"></i>Figma</span>
+          <span class="tag"><i style="background:var(--yellow)"></i>FigJam</span>
+          <span class="tag"><i style="background:var(--royal)"></i>Miro</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GOAL -->
+<section id="goal">
+  <span class="kicker reveal">Project goal</span>
+  <div class="goal reveal">
+    <p>Time tracking had become a challenge — scattered entries, delayed approvals, and recurring payroll errors. With Mewurk Timesheet, we set out to <strong>simplify the process</strong>: giving employees an effortless way to log hours, managers real-time visibility, and HR the accuracy and compliance they needed.</p>
+  </div>
+</section>
+
+<!-- PROBLEMS -->
+<section id="problems">
+  <h2 class="h2 reveal">Problem statements</h2>
+  <div class="problems reveal">
+    <div class="problem">
+      <div class="num">01</div>
+      <h3>Inaccurate time logging</h3>
+      <p><b>Problem:</b> Employees often forget to record their work hours during the day, leading to missing or overlapping entries — and inaccurate availability data.</p>
+      <p><b>Impact:</b> Payroll errors and unreliable project data downstream.</p>
+    </div>
+    <div class="problem">
+      <div class="num">02</div>
+      <h3>Manual data entry &amp; verification</h3>
+      <p><b>Problem:</b> Timesheets required manual entry and line-by-line verification by HR, making the process slow and error-prone.</p>
+      <p><b>Impact:</b> Hours of repetitive HR effort every cycle, with mistakes still slipping through.</p>
+    </div>
+    <div class="problem">
+      <div class="num">03</div>
+      <h3>Limited real-time visibility</h3>
+      <p><b>Problem:</b> Managers and HR lacked real-time insight into hours logged and project allocation — relying on end-of-week or end-of-month summaries.</p>
+      <p><b>Impact:</b> Overloaded team members and capacity problems surfaced too late to act on.</p>
+    </div>
+    <div class="problem">
+      <div class="num">04</div>
+      <h3>Inefficient approval workflows</h3>
+      <p><b>Problem:</b> Managers and HR reviewed and approved timesheets manually, one by one, with unclear multi-level workflows.</p>
+      <p><b>Impact:</b> Approval bottlenecks that delayed payroll and frustrated everyone in the chain.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section id="research">
+  <h2 class="h2 reveal">User research</h2>
+  <p class="lead reveal">We conducted user interviews with HR managers and employees from diverse industries — including IT, manufacturing and healthcare — to understand how timesheet functions across various sectors.</p>
+  <div class="stats reveal">
+    <div class="stat g1"><b>70%</b><p>of employees admitted to forgetting to log hours on time, causing submission delays.</p></div>
+    <div class="stat g2"><b>60%</b><p>of managers found tracking and approving timesheets manually to be time-consuming.</p></div>
+    <div class="stat g3"><b>55%</b><p>of HR professionals reported frequent payroll discrepancies due to inaccurate timesheets.</p></div>
+    <div class="stat g4"><b>45%</b><p>of employees said existing timesheet tools feel confusing or cumbersome to use.</p></div>
+  </div>
+</section>
+
+<!-- INTERVIEWS -->
+<section id="interviews">
+  <h2 class="h2 reveal">User interviews</h2>
+  <div class="interview-band reveal">
+    <div class="iv-top">
+      <p>We conducted in-depth interviews with <b>8 participants</b> — including HR professionals, project managers, and employees — to uncover how they currently track work hours and where the existing process breaks down.</p>
+    </div>
+    <div class="takeaways">
+      <div class="tk t1"><b>Takeaway 01</b>Manual effort and data inaccuracy are major pain points across all roles.</div>
+      <div class="tk t2"><b>Takeaway 02</b>All users want automation, clarity, and visibility in the timesheet workflow.</div>
+      <div class="tk t3"><b>Takeaway 03</b>HR strongly emphasised integration with project management for seamless resource tracking.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAS -->
+<section id="personas">
+  <h2 class="h2 reveal">Who are we designing for</h2>
+
+  <div class="persona p1 reveal">
+    <div class="p-head">
+      <div class="p-avatar">RP</div>
+      <div class="p-id"><b>Rahul Patil</b><span>Software Developer · IT industry</span></div>
+      <div class="p-facts">
+        <div><b>27</b><span>Age</span></div>
+        <div><b>3 yrs</b><span>Experience</span></div>
+        <div><b>12</b><span>Team size</span></div>
+      </div>
+    </div>
+    <p class="p-quote">"I keep forgetting to log hours until Friday — then I have to guess what I did on Monday. It takes me half an hour to reconstruct my whole week."</p>
+    <div class="p-cols">
+      <div class="p-col goals">
+        <h4>Goals</h4>
+        <ul>
+          <li>Log hours quickly without interrupting work</li>
+          <li>Submit timesheet on time, every cycle</li>
+          <li>See approval status without chasing his manager</li>
+          <li>Avoid rejected timesheets and payroll errors</li>
+        </ul>
+      </div>
+      <div class="p-col frus">
+        <h4>Frustrations</h4>
+        <ul>
+          <li>Can't recall exact hours worked days ago</li>
+          <li>No mobile-first experience for quick logging</li>
+          <li>Overlapping entries cause confusing errors</li>
+          <li>Timesheet vs. timelog distinction is confusing</li>
+        </ul>
+      </div>
+      <div class="p-col needs">
+        <h4>Needs from the product</h4>
+        <ul>
+          <li>Reminders &amp; auto-submission before deadlines</li>
+          <li>A calendar view to spot gaps at a glance</li>
+          <li>Overlaps flagged before submission, not after</li>
+          <li>Clear status visibility on submitted sheets</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="persona p2 reveal">
+    <div class="p-head">
+      <div class="p-avatar">SM</div>
+      <div class="p-id"><b>Shalini Mehta</b><span>Project Manager · Healthcare industry</span></div>
+      <div class="p-facts">
+        <div><b>34</b><span>Age</span></div>
+        <div><b>9 yrs</b><span>Experience</span></div>
+        <div><b>15</b><span>Team size</span></div>
+      </div>
+    </div>
+    <p class="p-quote">"I manage 15 people across 3 projects. I can't wait until end of month to know if someone is overloaded. I need to see it happening in real time."</p>
+    <div class="p-cols">
+      <div class="p-col goals">
+        <h4>Goals</h4>
+        <ul>
+          <li>Real-time view of team's logged vs. estimated hours</li>
+          <li>Approve timesheets without individual follow-ups</li>
+          <li>Identify team members at risk of overwork early</li>
+          <li>Log time on behalf of field workers when needed</li>
+        </ul>
+      </div>
+      <div class="p-col frus">
+        <h4>Frustrations</h4>
+        <ul>
+          <li>Relies on end-of-week summaries to assess progress</li>
+          <li>Spends hours verifying timesheets manually</li>
+          <li>No dashboard — must view each person individually</li>
+          <li>Multi-level approval workflows are unclear</li>
+        </ul>
+      </div>
+      <div class="p-col needs">
+        <h4>Needs from the product</h4>
+        <ul>
+          <li>Project dashboard with per-member logged vs. estimated hours</li>
+          <li>Bulk approval workflow with filters</li>
+          <li>Approve or reject with a documented reason</li>
+          <li>Edit logs while approving, without round-trips</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="persona p3 reveal">
+    <div class="p-head">
+      <div class="p-avatar">PD</div>
+      <div class="p-id"><b>Priya Desai</b><span>HR Manager · Manufacturing industry</span></div>
+      <div class="p-facts">
+        <div><b>38</b><span>Age</span></div>
+        <div><b>12 yrs</b><span>Experience</span></div>
+        <div><b>30+</b><span>People</span></div>
+      </div>
+    </div>
+    <p class="p-quote">"Every month-end I'm chasing 30 people for timesheets. If payroll is delayed by even a day, it's my problem. I need it to run itself as much as possible."</p>
+    <div class="p-cols">
+      <div class="p-col goals">
+        <h4>Goals</h4>
+        <ul>
+          <li>Automate timesheet collation and submission</li>
+          <li>Ensure payroll data accuracy before processing</li>
+          <li>Configure rules: max hours, overtime, restrictions</li>
+          <li>Maintain compliance with labour law regulations</li>
+        </ul>
+      </div>
+      <div class="p-col frus">
+        <h4>Frustrations</h4>
+        <ul>
+          <li>Manual monthly collation is error-prone</li>
+          <li>Frequent payroll discrepancies reach her desk</li>
+          <li>No automated warnings for hour violations</li>
+          <li>Hard to configure different rules per designation</li>
+        </ul>
+      </div>
+      <div class="p-col needs">
+        <h4>Needs from the product</h4>
+        <ul>
+          <li>Automated collation after the cutoff date</li>
+          <li>System locks &amp; submits pending logs at deadline</li>
+          <li>Restriction &amp; compliance engine — max hours, overtime, daily caps</li>
+          <li>Audit-ready reports, exports &amp; warning alerts</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USER FLOW -->
+<section id="flow">
+  <h2 class="h2 reveal">Mapping the user flow</h2>
+  <p class="lead reveal">The core timesheet flow follows a clear sequence — from project setup by admins to employee time logging, timesheet creation, and manager approval. The system must gracefully handle errors and edge cases like missing or not-submitted logs.</p>
+  <div class="flow reveal">
+    <div class="flow-track">
+      <div class="fnode start">Create clients, projects &amp; activities</div>
+      <span class="farrow">→</span>
+      <div class="fnode">Assign projects to employees</div>
+      <span class="farrow">→</span>
+      <div class="fnode">Add time logs</div>
+      <span class="farrow">→</span>
+      <div class="fnode">Create timesheet</div>
+      <span class="farrow">→</span>
+      <div class="fnode dec">All logs present?</div>
+      <span class="farrow">→</span>
+      <div class="fnode">Submit for approval</div>
+      <span class="farrow">→</span>
+      <div class="fnode end">Approve / reject with reason</div>
+    </div>
+    <p class="flow-note">Missing or overlapping logs branch into resolve-and-resubmit paths before approval.</p>
+  </div>
+</section>
+
+<!-- SOLUTIONS -->
+<section id="solutions">
+  <h2 class="h2 reveal">Turning research into design solutions</h2>
+  <div class="solutions reveal">
+    <div class="sol">
+      <div class="sol-top"><span class="sol-ico" style="background:rgba(46,91,255,.1)">📅</span><h3>Calendar view for time logs</h3></div>
+      <p>Week and month views make gaps and overlapping entries visible at a glance — preventing the 70% who forget to log on time from guessing later.</p>
+      <div class="sol-meta"><span class="pill p0">P0</span><span class="pill who">Employees</span></div>
+    </div>
+    <div class="sol">
+      <div class="sol-top"><span class="sol-ico" style="background:rgba(162,89,255,.12)">🔔</span><h3>Automated reminders</h3></div>
+      <p>Web + email nudges before deadlines, with configurable auto-submit — so timesheets arrive without HR chasing anyone.</p>
+      <div class="sol-meta"><span class="pill p0">P0</span><span class="pill who">Employees · HR</span></div>
+    </div>
+    <div class="sol">
+      <div class="sol-top"><span class="sol-ico" style="background:rgba(10,207,131,.12)">🌴</span><h3>Leave &amp; holiday pre-fill</h3></div>
+      <p>Approved leaves and holidays auto-appear in the timesheet — removing double entry between leave and attendance systems.</p>
+      <div class="sol-meta"><span class="pill p1">P1</span><span class="pill who">Employees</span></div>
+    </div>
+    <div class="sol">
+      <div class="sol-top"><span class="sol-ico" style="background:rgba(13,153,255,.12)">📊</span><h3>Project dashboard</h3></div>
+      <p>A member view of logged vs. estimated hours per project — replacing end-of-week summaries with live visibility.</p>
+      <div class="sol-meta"><span class="pill p1">P1</span><span class="pill who">Managers</span></div>
+    </div>
+    <div class="sol">
+      <div class="sol-top"><span class="sol-ico" style="background:rgba(255,199,0,.18)">⚡</span><h3>Quick add — projects &amp; activities</h3></div>
+      <p>Add new activities inline during time entry, without leaving the flow or waiting for an admin.</p>
+      <div class="sol-meta"><span class="pill p1">P1</span><span class="pill who">Employees</span></div>
+    </div>
+    <div class="sol">
+      <div class="sol-top"><span class="sol-ico" style="background:rgba(242,78,30,.1)">🛡️</span><h3>Validation &amp; restriction engine</h3></div>
+      <p>Max-hour controls, overtime rules and overlap checks that catch inaccuracies before they ever reach payroll.</p>
+      <div class="sol-meta"><span class="pill p0">P0</span><span class="pill who">HR admin</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTING -->
+<section id="testing">
+  <h2 class="h2 reveal">Did we solve the right problems, the right way?</h2>
+  <div class="ut-band reveal">
+    <div class="ut-bar">Usability testing — task scenarios</div>
+    <ul class="ut-list">
+      <li>Submit a timesheet for the current week with 2 projects assigned.</li>
+      <li>Add a new activity that doesn't exist in the system during time entry.</li>
+      <li>Approve a direct reportee's timesheet from the manager dashboard.</li>
+      <li>Find and fix an overlapping time entry flagged by the system.</li>
+      <li>Configure automated reminder settings as an HR admin.</li>
+    </ul>
+  </div>
+
+  <div class="findings reveal">
+    <div class="finding f1">
+      <b>High severity</b>
+      <h3>Time log vs. timesheet confusion</h3>
+      <p>Participants conflated "time logs" and "timesheets" — the same label was used for both, breaking their mental model of the flow.</p>
+    </div>
+    <div class="finding f2">
+      <b>Medium severity</b>
+      <h3>Overlap warnings dismissed too easily</h3>
+      <p>Users skimmed past passive overlap warnings and submitted anyway — errors continued into the approval stage.</p>
+    </div>
+    <div class="finding f3">
+      <b>Low severity</b>
+      <h3>Quick add discoverability</h3>
+      <p>Some users didn't notice the quick-add option during time entry and abandoned the task to look for an admin.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ITERATIONS -->
+<section id="iterations">
+  <h2 class="h2 reveal">Iterations after testing</h2>
+  <div class="iters reveal">
+    <div class="it-head"><div>Before</div><div>After</div></div>
+    <div class="it-row">
+      <div>Same label used for both "time logs" and "timesheets".</div>
+      <div>Navigation split into "My time logs" and "My timesheets" with distinct icons and copy.</div>
+    </div>
+    <div class="it-row">
+      <div>Overlap warning was a passive inline banner users scrolled past.</div>
+      <div>Blocking modal — the user must resolve the conflict before proceeding to submit.</div>
+    </div>
+    <div class="it-row">
+      <div>Quick add hidden as a small unlabelled icon inside the activity dropdown.</div>
+      <div>Prominent "+ Add new" action with a label, surfaced directly in the entry flow.</div>
+    </div>
+    <div class="it-row">
+      <div>Approval status visible only in the manager's section.</div>
+      <div>Status badge added to the employee's timesheet view after submission.</div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT -->
+<div class="next reveal">
+  <h2>Thanks for reading 🙌</h2>
+  <p>Want the full Figma walkthrough, or to talk about the decisions behind it?</p>
+  <div class="next-cta">
+    <a class="btn btn-white" href="mailto:agirish421@gmail.com">
+      Get in touch
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <a class="btn btn-ghost" href="/">← Back to portfolio</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <span>© 2026 Ashwin Girish</span>
+    <span>Case study · Mewurk Timesheet</span>
+    <a href="/">← Back to portfolio</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}
+    });
+  },{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+</script>
+</body>
+</html>
