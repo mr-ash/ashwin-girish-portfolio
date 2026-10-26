@@ -8,7 +8,6 @@ import { Navigation } from "@/components/portfolio/Navigation";
 import {
   QuickConnectProvider,
 } from "@/components/portfolio/QuickConnectContext";
-import { StickerStudio } from "@/components/portfolio/StickerStudio";
 import { StylesStrip } from "@/components/portfolio/StylesStrip";
 import { ThemeProvider } from "@/components/portfolio/ThemeProvider";
 import { Work } from "@/components/portfolio/Work";
@@ -29,7 +28,6 @@ export default function Home() {
         <About />
         <Contact />
         <Footer />
-        <StickerStudio />
       </QuickConnectProvider>
     </ThemeProvider>
   );
